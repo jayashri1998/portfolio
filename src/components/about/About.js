@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export const About = () => {
   const classes = useStyles();
   const greetings = "Hello there!";
-  const aboutme = `I'm ${FirstName} ${LastName},I am ${FirstName} ${LastName}, a React Developer with more than one year of experience. My expertise lies in recognizing and executing web-based user interactions. I am proficient in creating highly responsive user interface components by applying React concepts. I have the ability to transform designs and wireframes into top-notch code, utilizing JavaScript and ReactJS workflows for application interface development. With experience in overseeing and optimizing frontend performance, I am adept at troubleshooting and debugging to improve overall efficiency`;
+  const aboutme = `I'm ${FirstName} ${LastName},I am ${FirstName} ${LastName}, a React Developer with more than Two of experience. My expertise lies in recognizing and executing web-based user interactions. I am proficient in creating highly responsive user interface components by applying React concepts. I have the ability to transform designs and wireframes into top-notch code, utilizing JavaScript and ReactJS workflows for application interface development. With experience in overseeing and optimizing frontend performance, I am adept at troubleshooting and debugging to improve overall efficiency`;
 
   return (
     <section id="about">
@@ -41,6 +41,7 @@ export const About = () => {
             </Typography>
             <p className="aboutme">
               {aboutme}
+              
             </p>
             <a href="#contact" className="contact-btn">
               <i className="fas fa-terminal"></i>
