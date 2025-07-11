@@ -1,27 +1,33 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextDecrypt } from "../content/TextDecrypt";
-import image from '../../assets/image.png';
-import Techtalk from "../../assets/toptelk.png"
-import shadbox from '../../assets/shadbox.png'
-
 import './Works.css';
+import { Fade } from "react-reveal";
+
+import shadbox from '../../assets/shadbox.png';
+import image from '../../assets/image.png';
+import Techtalk from "../../assets/toptelk.png";
 import Lofo from '../../assets/recentprojects/lofo.png';
 import Lacalle from '../../assets/recentprojects/lacalle.png';
-import { Fade } from "react-reveal";
+import shadboxus from '../../assets/shadbox.us.png'
+import zipurl from '../../assets/Zipurl.png'
+import turf from '../../assets/turf.png'
 
 const useStyles = makeStyles((theme) => ({
   main: {
     maxWidth: '100vw',
     marginTop: '3em',
-    marginBottom: "auto",
+    marginBottom: "3em",
   },
 }));
 
+const ITEMS_PER_PAGE = 6;
+
 export const Works = () => {
   const classes = useStyles();
+  const [activeDesc, setActiveDesc] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [projects] = useState([
     { 
       id: 1,
@@ -67,46 +73,74 @@ export const Works = () => {
       image: Techtalk,
       link:'https://toptechtalks.io/'
     
+    },
+        { 
+      id: 6,
+      title: 'Shadbox.Us', 
+      description: 'Designed and developed a Shadbox website using ReactJS, and there libraries with fancy animations using react particles for the background element.',
+      alter: 'shadbox.us',
+      image: shadboxus,
+      link:'https://shadbox.us/'
+    
+    },
+        { 
+     id: 7,
+  title: 'Turf Booking',
+  description: 'Turf Booking is a web-based platform built using JavaScript, Ruby on Rails, and Tailwind CSS. It allows users to seamlessly browse, book, and manage turf reservations for sports and recreational activities. The platform provides a smooth user experience, real-time availability checking, and a secure booking process.',
+  alter: 'Turf Booking',
+  image: turf,
+  link: 'https://turfly.co/'
+
+    },
+        { 
+      id: 8,
+      title: 'ZipUrl', 
+     description: 'ZipUrl is a URL shortening web application built using React and Ruby on Rails. It allows users to convert long URLs into short, shareable links. The platform is designed for speed, simplicity, and efficient link management.',
+      alter: 'ZipUrl',
+      image: zipurl,
+      link:'https://zipurl.ai/'
+    
     }
   ]);
+  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
+  const paginatedProjects = projects.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
-  return (
+   return (
     <section id="works">
-      <Container component="main" className={classes.main} maxWidth="md">
-        {projects.map((project) => (
-          <div className="project" key={ project.id }>
-          <Fade left>
-          <div className="__img_wrapper relative group cursor-pointer">
-            {/* Image */}
-            <img src={project.image} alt={project.alter} className="w-full h-auto" />
-            
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a 
-                href={project.link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-white text-lg font-semibold underline"
-              >
-                Visit Project
-              </a>
-            </div>
-          </div>
-        </Fade>
-        
-        
-            <Fade right>
-            <div className="__content_wrapper">
-              <h3 className="title">
-                <TextDecrypt text={ project.id + '. ' + project.title } />
-              </h3>
-              <p className="description">
-                { project.description }
-              </p>
-            </div>
+    <h2 className="text-title">Things I’ve Built</h2>
+      <Container component="main" className={classes.main}>
+        <div className="grid-container">
+          {paginatedProjects.map((project) => (
+            <Fade key={project.id} bottom>
+              <div className="grid-item">
+                <img src={project.image} alt={project.title} />
+                <div className="overlay">
+                  <h3>{project.title}</h3>
+                  <div className="icon-group">
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noreferrer" title="Visit Project">🔍</a>
+                    )}
+                    <button title="Description" onClick={() => setActiveDesc(project.id)}>ℹ️</button>
+                  </div>
+                </div>
+                {activeDesc === project.id && (
+                  <div className="desc-overlay">
+                    <h4>{project.title}</h4>
+                    <p>{project.description}</p>
+                    <button onClick={() => setActiveDesc(null)}>Close</button>
+                  </div>
+                )}
+              </div>
             </Fade>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="pagination">
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Prev</button>
+          <span>{currentPage} / {totalPages}</span>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
+        </div>
       </Container>
     </section>
   );

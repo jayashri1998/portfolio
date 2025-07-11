@@ -12,6 +12,7 @@ import { SideNavbar } from '../components/nav/SideNavbar';
 import { Works } from '../components/works/Works';
 import { About } from '../components/about/About';
 import { Contact } from '../components/contact/Contact';
+import Award from '../components/award';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -30,6 +31,8 @@ export const Home = () => {
         <DisplacementSphere />
         <LogoLink />
         <Content />
+         <About />
+        <Award/>  
         <ThemeToggle />
         <Hidden smDown>
           <SocialIcons />
@@ -41,7 +44,7 @@ export const Home = () => {
       </div>
       <SideNavbar />
       <Works />
-      <About />
+     
       <Contact />
     </>
   );

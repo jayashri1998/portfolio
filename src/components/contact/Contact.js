@@ -1,13 +1,8 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
-import { useRef } from "react";
-import { Container, Typography, TextField, Button } from "@material-ui/core";
+import React, { useRef } from "react";
+import { Container, Typography, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextDecrypt } from "../content/TextDecrypt";
-import Swal from 'sweetalert2';
-
-import emailjs from '@emailjs/browser';
-
+import { toast } from 'sonner';
 import './Contact.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,81 +20,82 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 export const Contact = () => {
   const classes = useStyles();
   const greetings = "Say hello.";
-
   const form = useRef();
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
+    const formData = new FormData(form.current);
+    formData.append("access_key", "2f2b0cda-f77a-48e3-b0e3-caedc1656bc0");
 
-    emailjs.sendForm('service_ktjsvj3', 'template_1batqrs', form.current, 'Xapo6aYcWZGlv4XbJ')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
       });
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'You have sent an email!',
-      showConfirmButton: false,
-      timer: 1500
-    })
-    e.target.reset()
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Thanks for connecting with me");
+        console.log(toast)
+        e.target.reset();
+      } else {
+        alert("Submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("An unexpected error occurred.");
+    }
   };
 
-
-
-    return (
-      <section id="contact">
-        <Container component="main" className={classes.main} maxWidth="md">
-          <div className="contact">
-            <div className="_form_wrapper">
-              <form ref={form} onSubmit={sendEmail} className={classes.form}>
-                <TextField
-                  id="outlined-name-input"
-                  label="Name"
-                  type="text"
-                  size="small"
-                  variant="filled"
-                  name="from_name"
-                  className={classes.formfield}
-                />
-                <TextField
-                  id="outlined-password-input"
-                  label="Email"
-                  type="email"
-                  size="small"
-                  variant="filled"
-                  name="from_email"
-                  className={classes.formfield}
-                />
-                <TextField
-                  id="outlined-password-input"
-                  label="Message"
-                  type="textarea"
-                  size="small"
-                  multiline
-                  minRows={5}
-                  variant="filled"
-                  name="message"
-                  className={classes.formfield}
-                />
-                <button type="submit" value="Send" className="submit-btn">
+  return (
+    <section id="contact">
+      <Container component="main" className={classes.main} maxWidth="md">
+        <div className="contact">
+          <div className="_form_wrapper">
+            <form ref={form} onSubmit={sendEmail} className={classes.form}>
+              <TextField
+                label="Name"
+                type="text"
+                size="small"
+                variant="filled"
+                name="name"
+                required
+                className={classes.formfield}
+              />
+              <TextField
+                label="Email"
+                type="email"
+                size="small"
+                variant="filled"
+                name="email"
+                required
+                className={classes.formfield}
+              />
+              <TextField
+                label="Message"
+                size="small"
+                multiline
+                minRows={5}
+                variant="filled"
+                name="message"
+                required
+                className={classes.formfield}
+              />
+              <button type="submit" className="submit-btn">
                 <i className="fas fa-terminal"></i>
-                  <Typography component='span'> Send Message</Typography>
-                </button>
-              </form>
-            </div>
-            <h1 className="contact_msg">
-              <TextDecrypt text={greetings}/>
-            </h1>
+                <Typography component='span'> Send Message</Typography>
+              </button>
+            </form>
           </div>
-        </Container>
-      </section>
+          <h1 className="contact_msg">
+            <TextDecrypt text={greetings}/>
+          </h1>
+        </div>
+      </Container>
+    </section>
   );
 };
